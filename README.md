@@ -1,4 +1,8 @@
-# Hug
+# h.u.g. (Help Us Git w/Waffle)
+
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/jasonhodges/h.u.g..svg?columns=all)](https://waffle.io/jasonhodges/h.u.g.)
+
+[![Build Status](https://travis-ci.org/jasonhodges/h.u.g..svg?branch=master)](https://travis-ci.org/jasonhodges/h.u.g.)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
