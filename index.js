@@ -1,20 +1,11 @@
 const RP = require('request-promise');
+
 async function getIssueLabels(context, issueNum) {
   const params = context.issue({number: issueNum});
   const labels = await context.github.issues.getIssueLabels(params);
   console.log('---------------------------Labels: ', labels);
   return labels;
 }
-
-const getAllIssues = RP({
-  uri: "https://api.waffle.io/projects/5b293bd3b375920031f9602e/cards?access_token=eMunnCMns25U5Xg9yRAYu37oIh83HAtcOqwHcyop",
-  headers: {
-    Accept: "application/vnd.waffle.v1+json"
-  },
-  json: true
-}).then(res => {
-    console.log(res)
-  });
 
 module.exports = robot => {
   robot.on('status', async context => {
@@ -46,7 +37,68 @@ module.exports = robot => {
     }
   });
   robot.on('issues.opened', async context => {
-    const issues = await getAllIssues();
+    const issues = await getAllIssues;
   })
 };
 
+async function getAllIssues () {
+  console.log('get all issues')
+  RP({
+    uri: "https://api.waffle.io/projects/5b293bd3b375920031f9602e/cards?access_token=eMunnCMns25U5Xg9yRAYu37oIh83HAtcOqwHcyop",
+    headers: {
+      Accept: "application/vnd.waffle.v1+json"
+    },
+    json: true
+  }).then(res => {
+    res.map(issue => {
+      console.log(issue.githubMetadata)
+      if (new Date(issue.githubMetadata.updated_at) < new Date(new Date().getTime() - (5 * 60000))) {
+        console.log(issue.githubMetadata.labels)
+        issue.githubMetadata.labels.filter((x) => x.name !== "old 🖤" || x.name !== "stale 💔");
+        return updateGithubTicketsById(issue.githubMetadata, "aging 💜")
+      }
+      if (new Date(issue.githubMetadata.updated_at) < new Date(new Date().getTime() - (10 * 60000))) {
+        console.log(issue.githubMetadata.labels)
+        issue.githubMetadata.labels.filter((x) => x.name !== "aging 💜" || x.name !== "stale 💔");
+        return updateGithubTicketsById(issue.githubMetadata, "old 🖤")
+      }
+      if (new Date(issue.githubMetadata.updated_at) < new Date(new Date().getTime() - (20 * 60000))) {
+        console.log(issue.githubMetadata.labels)
+        issue.githubMetadata.labels.filter((x) => x.name !== "aging 💜" || x.name !== "old 🖤");
+        return updateGithubTicketsById(issue.githubMetadata, "stale 💔")
+      }
+    })
+  });
+}
+
+async function updateGithubTicketsById(issue, label) {
+
+  RP({
+    uri: `https://api.github.com/repos/jasonhodges/h.u.g./issues/${issue.number}`,
+    method: "PATCH",
+    headers: {
+      "User-Agent": "h.u.g.",
+      Accept: "application/vnd.github.symmetra-preview+json",
+      'Host': 'api.github.com',
+      'Authorization': 'Basic ' + new Buffer("jet0316" + ':' + "guitar01").toString('base64')
+    },
+    body: {
+      labels: [
+        ...issue.labels,
+        label
+      ]
+    },
+    json: true
+  })
+    .then(res => {
+      // console.log(res)
+    })
+
+}
+
+async function addWaffleEmoji() {
+
+}
+
+getAllIssues();
+// getAllGithubIssues();
