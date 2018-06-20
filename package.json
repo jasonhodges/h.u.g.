@@ -24,6 +24,7 @@
     "@octokit/rest": "^15.9.0",
     "core-js": "^2.5.4",
     "probot": "^6.0.0",
+    "request-promise": "^4.2.2",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },
