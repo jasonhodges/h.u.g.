@@ -6,7 +6,7 @@ node_js:
 
 branches:
   only:
-    
+
 
 before_script:
   - npm install -g @angular/cli

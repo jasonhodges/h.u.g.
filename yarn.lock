@@ -183,7 +183,7 @@
     tree-kill "^1.0.0"
     webpack-sources "^1.1.0"
 
-"@octokit/rest@^15.6.0":
+"@octokit/rest@^15.6.0", "@octokit/rest@^15.9.0":
   version "15.9.0"
   resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.0.tgz#47863d114cd56a398b0774b4e6f9f942b3ffd2fd"
   dependencies:
