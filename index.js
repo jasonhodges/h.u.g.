@@ -1,4 +1,4 @@
-const RP = require('request-promise');\
+const RP = require('request-promise');
 const isSimilarIssue = (issues, issue) => {
 
 }
