@@ -18,7 +18,8 @@ module.exports = robot => {
   robot.on('status', async context => {
       robot.log('Branch Name:', context.payload.branches[0].name)
     const branchRegex = /(\#([0-9]*))/g;
-    const branchNum = branchRegex.exec(context.payload.branches[0].name).substring(1);
+    const branchNum = branchRegex.exec(context.payload.branches[0].name);
+    robot.log(`Branch number: ${branchNum}`);
     if (context.payload.state === 'success') {
       const params = context.issue({number: branchNum, labels: [{name: "CI:Passed"}]});
       return context.github.issues.edit(params)
