@@ -18,11 +18,16 @@ const getAllIssues = RP({
 
 module.exports = robot => {
   robot.on('status', async context => {
-      robot.log('Branch Name:', context.payload.branches[0].name);
-    // const branchRegex = /(\#([0-9]*))/g;
     const branchRegex = /([0-9]*\d)/g;
-    const branchNum = branchRegex.exec(context.payload.branches[0].name);
-    robot.log(`Branch number: ${branchNum}`);
+
+    const sha = context.payload.sha;
+    robot.log(`Sha: ${context.payload.sha}`);
+    const filteredBranch = context.payload.branches.reduce((acc, b) => {
+      robot.log(`HERE is b......... ${JSON.stringify(b)}`)
+      return b.commit.sha === sha ? b.name : acc;
+    }, null);
+    const branchNum = branchRegex.exec(filteredBranch)[0];
+    robot.log('branchNum: ', branchNum);
     if (context.payload.state === 'success') {
       const labelParams = context.issue({number: branchNum});
       const labels = await context.github.issues.getIssueLabels(labelParams);
